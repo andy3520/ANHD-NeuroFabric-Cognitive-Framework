@@ -57,7 +57,7 @@ The framework draws inspiration from three converging disciplines:
 - **Neuroscience:** The human brain functions as a network of semi-autonomous regions — visual, auditory, prefrontal — each specialized but deeply interconnected.
 - **Cognitive Science:** Marvin Minsky’s _Society of Mind_ (1986) described intelligence as emerging from the collaboration of many simple agents.
 - **Multi-Agent Systems:** The FIPA standards (Foundation for Intelligent Physical Agents) established message-driven autonomy between computational agents.  
-  [FIPA ACL Message Structure Specification](./docs/FIPA ACL Message Structure Specification.pdf)
+  [FIPA ACL Message Structure Specification (2002)](./docs/FIPA-ACL-Message-Structure-Specification.pdf)
 
 The central idea is that cognition isn’t about size; it’s about **structure**.  
 The goal of ANHD-NeuroFabric is to engineer _emergent intelligence through communication topology_, not raw parameter count.
@@ -88,7 +88,7 @@ The intelligence of the whole system emerges from the coordination of these part
 Agents communicate using a **hybrid protocol** with three layers:
 
 1. **Control Layer** — Modeled on FIPA performatives: `REQUEST`, `INFORM`, `PROPOSE`, `CONFIRM`, `EVALUATE`.  
-   Reference: https://web.archive.org/web/20180820183844/http://www.fipa.org/specs/fipa00061/SC00061G.pdf
+   Reference: [FIPA ACL Message Structure Specification](./docs/FIPA-ACL-Message-Structure-Specification.pdf)
 2. **Semantic Layer** — Messages embed high-dimensional vector representations of content (e.g., CLIP embeddings).  
    Radford et al., _Learning Transferable Visual Models from Natural Language Supervision_ (2021).  
    https://arxiv.org/abs/2103.00020
@@ -232,20 +232,20 @@ Contact: `nguyenhieuducan@gmail.com`
 
 ## References
 
-1. [FIPA ACL Message Structure Specification (2002)](./docs/FIPA ACL Message Structure Specification.pdf)
-2. Radford et al., _Learning Transferable Visual Models from Natural Language Supervision (CLIP)_, OpenAI (2021)  
+1. [FIPA ACL Message Structure Specification (2002)](./docs/FIPA-ACL-Message-Structure-Specification.pdf)
+1. Radford et al., _Learning Transferable Visual Models from Natural Language Supervision (CLIP)_, OpenAI (2021)  
    https://arxiv.org/abs/2103.00020
-3. Zhang et al., _Versioned Capability Vectors for Agent Routing_, NeurIPS Workshop (2024)  
+1. Zhang et al., _Versioned Capability Vectors for Agent Routing_, NeurIPS Workshop (2024)  
    https://arxiv.org/abs/2410.00098
-4. McClelland, O’Reilly & McNaughton, _Why There Are Complementary Learning Systems in the Hippocampus and Neocortex_, _Psychological Review_ (1995)  
+1. McClelland, O’Reilly & McNaughton, _Why There Are Complementary Learning Systems in the Hippocampus and Neocortex_, _Psychological Review_ (1995)  
    https://doi.org/10.1037/0033-295X.102.3.419
-5. LangChain LangGraph Documentation (2025)  
+1. LangChain LangGraph Documentation (2025)  
    https://docs.langchain.com/oss/python/langgraph/overview
-6. Microsoft AutoGen Project (2024)  
+1. Microsoft AutoGen Project (2024)  
    https://microsoft.github.io/autogen/
-7. Kore.ai Agent Platform (2025)  
+1. Kore.ai Agent Platform (2025)  
    https://kore.ai/agent-platform/multi-agent-orchestration/
-8. MQTT Protocol – Lightweight Messaging for IoT and Agents  
+1. MQTT Protocol – Lightweight Messaging for IoT and Agents  
    https://mqtt.org/
 
 ---
