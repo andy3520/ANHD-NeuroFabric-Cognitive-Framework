@@ -9,9 +9,33 @@ _Independent AI systems researcher exploring modular synthetic cognition and eme
 
 ## Conceptual Figure
 
-_Placeholder:_  
-“Conceptual illustration of the ANHD-NeuroFabric cognitive framework — a synthetic ‘brain’ of interconnected AI agents (cells) coordinated like neurons.”  
-_You can later add an image here, e.g. `/docs/neurofabric-diagram.png`._
+This diagram illustrates the flow of information and control within the NeuroFabric framework. The Coordinator decomposes a goal, Specialists execute tasks, the Analyst synthesizes results, the Super-Critic ensures quality, and the Memory region enables learning and adaptation across the entire system.
+
+```mermaid
+graph TD;
+    subgraph "ANHD-NeuroFabric Cognitive Framework"
+        A[External Goal/Input] --> C{Coordinator};
+
+        C -- 1. Decompose & Delegate --> S[Specialists];
+        S -- 2. Perform Subtasks --> AN(Analyst);
+        AN -- 3. Synthesize & Interpret --> SC(Super-Critic);
+        SC -- 4. Evaluate & Filter --> AN;
+        AN -- 5. Report Insights --> C;
+
+        C <--> M[(Memory & Consolidation)];
+        AN <--> M;
+        S <--> M;
+        SC <--> M;
+
+        C -- 6. Produce Output --> O[Final Result];
+    end
+
+    classDef region fill:#f9f9f9,stroke:#333,stroke-width:2px,color:#333;
+    class C,AN,S,SC,M region;
+
+    classDef io fill:#d4e6f1,stroke:#2980b9,stroke-width:2px;
+    class A,O io;
+```
 
 ---
 
