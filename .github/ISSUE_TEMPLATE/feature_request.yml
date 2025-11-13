@@ -1,0 +1,27 @@
+name: Feature Request
+description: Suggest an idea, extension, or architectural improvement
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      placeholder: What problem or limitation does this proposal address?
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed Change
+      placeholder: Describe your idea — new cell type, protocol, memory mechanism, routing logic, etc.
+
+  - type: textarea
+    id: references
+    attributes:
+      label: Related Work / Inspiration
+      placeholder: Papers, frameworks, algorithms, or prior research.
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Expected Impact
+      placeholder: How does this improve the NeuroFabric concept?
