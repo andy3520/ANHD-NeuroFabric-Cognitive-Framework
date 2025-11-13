@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use ANHD-NeuroFabric in academic work, research, or open-source projects, please cite this repository."
+title: "ANHD-NeuroFabric Cognitive Framework"
+authors:
+  - family-names: "Nguyen"
+    given-names: "Hieu Duc An"
+    alias: "Andy H. Nguyen"
+    email: "nguyenhieuducan@gmail.com"
+version: "1.0"
+date-released: "2025-11-13"
+license: "CC-BY-NC-4.0"
+repository-code: "https://github.com/andy3520/ANHD-NeuroFabric-Cognitive-Framework"
+keywords:
+  - artificial cognition
+  - synthetic brain
+  - multi-agent systems
+  - modular intelligence
+  - cognitive architecture

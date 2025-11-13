@@ -26,7 +26,8 @@ NeuroFabric proposes that cognition can emerge from:
 - Cost-aware scaling that mirrors how brains distribute workload.
 
 You can read the full whitepaper here:  
-📘 [WHITEPAPER](./WHITEPAPER.md)
+📘 [WHITEPAPER (Markdown)](./WHITEPAPER.md)  
+📥 [Download the PDF Whitepaper (v1.0)](./docs/ANHD-NeuroFabric-Cognitive-Framework-Whitepaper-v1.0.pdf)
 
 ---
 
