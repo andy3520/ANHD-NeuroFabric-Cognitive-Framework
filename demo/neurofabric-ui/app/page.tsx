@@ -10,6 +10,7 @@ import { Brain, Sparkles, BarChart3, ChevronDown, ChevronUp } from "lucide-react
 import ChatInterface from "@/components/chat/ChatInterface";
 import MessageList from "@/components/chat/MessageList";
 import MetricsDashboard from "@/components/metrics/MetricsDashboard";
+import TraditionalView from "@/components/traditional/TraditionalView";
 import { Message, AgentMetrics } from "@/lib/types";
 
 export default function Home() {
@@ -19,6 +20,16 @@ export default function Home() {
   const [isMetricsOpen, setIsMetricsOpen] = useState(true);
   const [isMessagesOpen, setIsMessagesOpen] = useState(true);
   const [messagesHeight, setMessagesHeight] = useState(400);
+  
+  // Traditional AI state
+  const [traditionalTask, setTraditionalTask] = useState("");
+  const [traditionalProcessing, setTraditionalProcessing] = useState(false);
+  const [traditionalResponse, setTraditionalResponse] = useState("");
+  const [traditionalMetrics, setTraditionalMetrics] = useState<{
+    time: number;
+    cost: number;
+    tokens: number;
+  } | null>(null);
 
   const handleTaskSubmit = async (task: string) => {
     setIsProcessing(true);
@@ -181,6 +192,41 @@ export default function Home() {
     setAgentMetrics(mockMetrics);
   };
 
+  const handleTraditionalTaskSubmit = async (task: string) => {
+    setTraditionalProcessing(true);
+    setTraditionalTask(task);
+    setTraditionalResponse("");
+    setTraditionalMetrics(null);
+
+    // Simulate traditional AI processing (longer, single response)
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
+    const mockResponse = `Based on analyzing the reviews, here's my assessment:
+
+Average Rating: 3.8 out of 5 stars
+The overall rating suggests generally positive customer satisfaction, though there is room for improvement.
+
+Sentiment Analysis:
+- 60% Positive feedback
+- 20% Neutral comments  
+- 20% Negative feedback
+
+Key Findings:
+1. Service Quality: Customers consistently praise the excellent service and helpful staff.
+2. Value for Money: Many reviewers mention good value and fair pricing.
+3. Product Quality: This appears to be the main area of concern, with mixed opinions. Some customers love the quality while others found it inconsistent.
+
+Recommendation: Focus on improving quality consistency while maintaining the strong service standards and competitive pricing that customers appreciate.`;
+
+    setTraditionalResponse(mockResponse);
+    setTraditionalMetrics({
+      time: 8500, // Slower than multi-agent
+      cost: 0.0024, // Higher cost
+      tokens: 6800, // More tokens
+    });
+    setTraditionalProcessing(false);
+  };
+
   const totalMetrics = {
     time: agentMetrics.reduce((sum, m) => sum + m.processingTime, 0),
     cost: agentMetrics.reduce((sum, m) => sum + m.cost, 0),
@@ -235,8 +281,8 @@ export default function Home() {
                 <span className="hidden sm:inline">Side-by-Side (Coming Soon)</span>
                 <span className="sm:hidden">Compare</span>
               </TabsTrigger>
-              <TabsTrigger value="traditional" disabled className="text-xs sm:text-sm whitespace-nowrap px-2 sm:px-4">
-                <span className="hidden sm:inline">Traditional (Coming Soon)</span>
+              <TabsTrigger value="traditional" className="text-xs sm:text-sm whitespace-nowrap px-2 sm:px-4">
+                <span className="hidden sm:inline">Traditional AI</span>
                 <span className="sm:hidden">Traditional</span>
               </TabsTrigger>
             </TabsList>
@@ -341,6 +387,41 @@ export default function Home() {
                     <p className="text-sm text-muted-foreground">
                       Select an example task or enter your own to see how 5 specialized
                       AI agents collaborate to solve complex problems.
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Note: Currently using mock data. Backend integration coming soon.
+                    </p>
+                  </div>
+                </Card>
+              )}
+            </TabsContent>
+
+            <TabsContent value="traditional" className="space-y-6 mt-6">
+              {/* Chat Interface */}
+              <div>
+                <h3 className="mb-3 text-lg font-semibold">Enter Your Task</h3>
+                <ChatInterface onSubmit={handleTraditionalTaskSubmit} isProcessing={traditionalProcessing} />
+              </div>
+
+              <Separator />
+
+              {/* Traditional AI Response */}
+              <TraditionalView
+                task={traditionalTask}
+                isProcessing={traditionalProcessing}
+                response={traditionalResponse}
+                metrics={traditionalMetrics}
+              />
+
+              {/* Info Notice */}
+              {!traditionalTask && (
+                <Card className="border-primary/50 bg-primary/5 p-6">
+                  <div className="space-y-2 text-center">
+                    <Brain className="mx-auto h-10 w-10 text-primary" />
+                    <h3 className="text-lg font-bold">Try Traditional AI</h3>
+                    <p className="text-sm text-muted-foreground">
+                      See how a single large language model processes the same task.
+                      Compare the speed, cost, and results with the multi-agent approach.
                     </p>
                     <p className="text-xs text-muted-foreground">
                       Note: Currently using mock data. Backend integration coming soon.
