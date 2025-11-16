@@ -6,18 +6,17 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Brain, Sparkles, BarChart3, Network, ChevronDown, ChevronUp } from "lucide-react";
+import { Brain, Sparkles, BarChart3, ChevronDown, ChevronUp } from "lucide-react";
 import ChatInterface from "@/components/chat/ChatInterface";
 import MessageList from "@/components/chat/MessageList";
 import MetricsDashboard from "@/components/metrics/MetricsDashboard";
-import AgentNetwork from "@/components/graph/AgentNetwork";
 import { Message, AgentMetrics } from "@/lib/types";
 
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [agentMetrics, setAgentMetrics] = useState<AgentMetrics[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isNetworkOpen, setIsNetworkOpen] = useState(true);
+  const [isMetricsOpen, setIsMetricsOpen] = useState(true);
   const [isMessagesOpen, setIsMessagesOpen] = useState(true);
   const [messagesHeight, setMessagesHeight] = useState(400);
 
@@ -227,13 +226,18 @@ export default function Home() {
 
           {/* Mode Selection */}
           <Tabs defaultValue="fabric" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="fabric">NeuroFabric Demo</TabsTrigger>
-              <TabsTrigger value="comparison" disabled>
-                Side-by-Side (Coming Soon)
+            <TabsList className="grid w-full grid-cols-3 h-auto">
+              <TabsTrigger value="fabric" className="text-xs sm:text-sm whitespace-nowrap px-2 sm:px-4">
+                <span className="hidden sm:inline">NeuroFabric Demo</span>
+                <span className="sm:hidden">Demo</span>
               </TabsTrigger>
-              <TabsTrigger value="traditional" disabled>
-                Traditional (Coming Soon)
+              <TabsTrigger value="comparison" disabled className="text-xs sm:text-sm whitespace-nowrap px-2 sm:px-4">
+                <span className="hidden sm:inline">Side-by-Side (Coming Soon)</span>
+                <span className="sm:hidden">Compare</span>
+              </TabsTrigger>
+              <TabsTrigger value="traditional" disabled className="text-xs sm:text-sm whitespace-nowrap px-2 sm:px-4">
+                <span className="hidden sm:inline">Traditional (Coming Soon)</span>
+                <span className="sm:hidden">Traditional</span>
               </TabsTrigger>
             </TabsList>
 
@@ -243,34 +247,6 @@ export default function Home() {
                 <h3 className="mb-3 text-lg font-semibold">Enter Your Task</h3>
                 <ChatInterface onSubmit={handleTaskSubmit} isProcessing={isProcessing} />
               </div>
-
-              <Separator />
-
-              {/* 3D Agent Network - Collapsible */}
-              <Collapsible open={isNetworkOpen} onOpenChange={setIsNetworkOpen}>
-                <div className="flex items-center justify-between">
-                  <CollapsibleTrigger asChild>
-                    <Button variant="ghost" className="flex w-full justify-between p-0 hover:bg-transparent">
-                      <div className="flex items-center gap-2">
-                        <Network className="h-5 w-5 text-primary" />
-                        <h3 className="text-lg font-semibold">Agent Network</h3>
-                      </div>
-                      {isNetworkOpen ? (
-                        <ChevronUp className="h-5 w-5 text-muted-foreground" />
-                      ) : (
-                        <ChevronDown className="h-5 w-5 text-muted-foreground" />
-                      )}
-                    </Button>
-                  </CollapsibleTrigger>
-                </div>
-                <CollapsibleContent className="mt-3">
-                  <AgentNetwork
-                    messages={messages}
-                    agentMetrics={agentMetrics}
-                    isProcessing={isProcessing}
-                  />
-                </CollapsibleContent>
-              </Collapsible>
 
               <Separator />
 
@@ -326,24 +302,35 @@ export default function Home() {
                 </CollapsibleContent>
               </Collapsible>
 
-              {/* Metrics */}
-              {agentMetrics.length > 0 && (
-                <>
-                  <Separator />
-                  <div>
-                    <div className="mb-3 flex items-center gap-2">
-                      <BarChart3 className="h-5 w-5 text-primary" />
-                      <h3 className="text-lg font-semibold">Performance Metrics</h3>
-                    </div>
-                    <MetricsDashboard
-                      metrics={agentMetrics}
-                      totalTime={totalMetrics.time}
-                      totalCost={totalMetrics.cost}
-                      totalTokens={totalMetrics.tokens}
-                    />
-                  </div>
-                </>
-              )}
+              {/* Performance Metrics - Collapsible - Always visible */}
+              <Separator />
+              <Collapsible open={isMetricsOpen} onOpenChange={setIsMetricsOpen}>
+                <div className="flex items-center justify-between">
+                  <CollapsibleTrigger asChild>
+                    <Button variant="ghost" className="flex w-full justify-between p-0 hover:bg-transparent">
+                      <div className="flex items-center gap-2">
+                        <BarChart3 className="h-5 w-5 text-primary" />
+                        <h3 className="text-lg font-semibold">Performance Metrics</h3>
+                      </div>
+                      {isMetricsOpen ? (
+                        <ChevronUp className="h-5 w-5 text-muted-foreground" />
+                      ) : (
+                        <ChevronDown className="h-5 w-5 text-muted-foreground" />
+                      )}
+                    </Button>
+                  </CollapsibleTrigger>
+                </div>
+                <CollapsibleContent className="mt-3">
+                  <MetricsDashboard
+                    metrics={agentMetrics}
+                    messages={messages}
+                    totalTime={totalMetrics.time}
+                    totalCost={totalMetrics.cost}
+                    totalTokens={totalMetrics.tokens}
+                    isLoading={messages.length > 0 && agentMetrics.length === 0}
+                  />
+                </CollapsibleContent>
+              </Collapsible>
 
               {/* Info Notice */}
               {messages.length === 0 && (

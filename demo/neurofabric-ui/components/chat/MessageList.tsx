@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Message } from "@/lib/types";
@@ -59,23 +59,26 @@ export default function MessageList({ messages, height = 400 }: MessageListProps
           </Button>
         </div>
       </div>
-      <ScrollArea className="h-[calc(100%-60px)] p-4">
-        <div className="space-y-3">
-          {viewMode === "flat" ? (
-            messages.map((message) => (
-              <MessageItem key={message.id} message={message} level={0} />
-            ))
-          ) : (
-            rootMessages.map((message) => (
-              <MessageThread
-                key={message.id}
-                message={message}
-                getChildren={getChildren}
-                level={0}
-              />
-            ))
-          )}
+      <ScrollArea className="h-[calc(100%-60px)]">
+        <div className="p-4">
+          <div className="space-y-3">
+            {viewMode === "flat" ? (
+              messages.map((message) => (
+                <MessageItem key={message.id} message={message} level={0} />
+              ))
+            ) : (
+              rootMessages.map((message) => (
+                <MessageThread
+                  key={message.id}
+                  message={message}
+                  getChildren={getChildren}
+                  level={0}
+                />
+              ))
+            )}
+          </div>
         </div>
+        <ScrollBar orientation="horizontal" />
       </ScrollArea>
     </Card>
   );
@@ -164,25 +167,25 @@ function MessageItem({ message, level }: { message: Message; level: number }) {
         >
           <Icon className="h-4 w-4" style={{ color: agentColor }} />
         </div>
-        <div className="flex-1 space-y-1">
+        <div className="flex-1 space-y-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium">{agentLabel}</span>
+              <span className="text-sm font-medium whitespace-nowrap">{agentLabel}</span>
               <Badge
                 variant="secondary"
-                className="h-5 text-xs font-mono"
+                className="h-5 text-xs font-mono shrink-0"
               >
                 {fromId}
               </Badge>
             </div>
             
-            <ArrowRight className="h-3 w-3 text-muted-foreground" />
+            <ArrowRight className="h-3 w-3 text-muted-foreground shrink-0" />
             
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium">{toAgentLabel}</span>
+              <span className="text-sm font-medium whitespace-nowrap">{toAgentLabel}</span>
               <Badge
                 variant="secondary"
-                className="h-5 text-xs font-mono"
+                className="h-5 text-xs font-mono shrink-0"
               >
                 {toId}
               </Badge>
@@ -190,17 +193,17 @@ function MessageItem({ message, level }: { message: Message; level: number }) {
 
             <Badge
               variant="outline"
-              className="h-5 text-xs"
+              className="h-5 text-xs shrink-0"
               style={{ borderColor: agentColor, color: agentColor }}
             >
               {message.type}
             </Badge>
             
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs text-muted-foreground shrink-0 whitespace-nowrap">
               {new Date(message.timestamp).toLocaleTimeString()}
             </span>
           </div>
-          <p className="text-sm text-muted-foreground leading-relaxed">
+          <p className="text-sm text-muted-foreground leading-relaxed break-words whitespace-normal">
             {message.content}
           </p>
         </div>
