@@ -5,16 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
-import { Brain, Sparkles, BarChart3 } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Brain, Sparkles, BarChart3, Network, ChevronDown, ChevronUp } from "lucide-react";
 import ChatInterface from "@/components/chat/ChatInterface";
 import MessageList from "@/components/chat/MessageList";
 import MetricsDashboard from "@/components/metrics/MetricsDashboard";
+import AgentNetwork from "@/components/graph/AgentNetwork";
 import { Message, AgentMetrics } from "@/lib/types";
 
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [agentMetrics, setAgentMetrics] = useState<AgentMetrics[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isNetworkOpen, setIsNetworkOpen] = useState(true);
+  const [isMessagesOpen, setIsMessagesOpen] = useState(true);
+  const [messagesHeight, setMessagesHeight] = useState(400);
 
   const handleTaskSubmit = async (task: string) => {
     setIsProcessing(true);
@@ -37,62 +42,85 @@ export default function Home() {
   };
 
   const simulateAgentProcessing = async (task: string) => {
+    const baseTime = Date.now();
+    const msg1Id = `msg-${baseTime}-1`;
+    const msg2Id = `msg-${baseTime}-2`;
+    const msg3Id = `msg-${baseTime}-3`;
+    
     const mockMessages: Message[] = [
       {
-        id: `msg-${Date.now()}-1`,
+        id: msg1Id,
         from: "coordinator" as any,
+        fromInstanceId: "coordinator-1",
         to: "system",
         content: "Analyzing task and decomposing into subtasks...",
-        timestamp: Date.now() + 500,
+        timestamp: baseTime + 500,
         type: "info",
       },
       {
-        id: `msg-${Date.now()}-2`,
+        id: msg2Id,
         from: "coordinator" as any,
+        fromInstanceId: "coordinator-1",
         to: "specialist_math" as any,
+        toInstanceId: "specialist_math-1",
         content: "Calculate the average rating from the reviews",
-        timestamp: Date.now() + 1000,
+        timestamp: baseTime + 1000,
         type: "request",
+        parentMessageId: msg1Id,
       },
       {
-        id: `msg-${Date.now()}-3`,
+        id: msg3Id,
         from: "coordinator" as any,
+        fromInstanceId: "coordinator-1",
         to: "specialist_text" as any,
+        toInstanceId: "specialist_text-1",
         content: "Analyze sentiment trends in the reviews",
-        timestamp: Date.now() + 1500,
+        timestamp: baseTime + 1500,
         type: "request",
+        parentMessageId: msg1Id,
       },
       {
-        id: `msg-${Date.now()}-4`,
+        id: `msg-${baseTime}-4`,
         from: "specialist_math" as any,
+        fromInstanceId: "specialist_math-1",
         to: "analyst" as any,
+        toInstanceId: "analyst-1",
         content: "Average rating calculated: 3.8/5 (based on ratings: 5, 3, 5, 2, 4)",
-        timestamp: Date.now() + 2500,
+        timestamp: baseTime + 2500,
         type: "response",
+        parentMessageId: msg2Id,
       },
       {
-        id: `msg-${Date.now()}-5`,
+        id: `msg-${baseTime}-5`,
         from: "specialist_text" as any,
+        fromInstanceId: "specialist_text-1",
         to: "analyst" as any,
+        toInstanceId: "analyst-1",
         content: "Sentiment analysis: 60% positive, 20% neutral, 20% negative. Key themes: Quality (mixed), Service (positive), Value (positive)",
-        timestamp: Date.now() + 3000,
+        timestamp: baseTime + 3000,
         type: "response",
+        parentMessageId: msg3Id,
       },
       {
-        id: `msg-${Date.now()}-6`,
+        id: `msg-${baseTime}-6`,
         from: "analyst" as any,
+        fromInstanceId: "analyst-1",
         to: "super_critic" as any,
+        toInstanceId: "super_critic-1",
         content: "Synthesized result: Average rating of 3.8/5 with generally positive sentiment (60%). Customers appreciate service and value but have mixed opinions on quality.",
-        timestamp: Date.now() + 3500,
+        timestamp: baseTime + 3500,
         type: "response",
+        parentMessageId: `msg-${baseTime}-4`,
       },
       {
-        id: `msg-${Date.now()}-7`,
+        id: `msg-${baseTime}-7`,
         from: "super_critic" as any,
+        fromInstanceId: "super_critic-1",
         to: "system",
         content: "✓ Quality check passed. Result is accurate and comprehensive.",
-        timestamp: Date.now() + 4000,
+        timestamp: baseTime + 4000,
         type: "info",
+        parentMessageId: `msg-${baseTime}-6`,
       },
     ];
 
@@ -218,18 +246,85 @@ export default function Home() {
 
               <Separator />
 
-              {/* Message Flow */}
-              <div>
-                <div className="mb-3 flex items-center gap-2">
-                  <h3 className="text-lg font-semibold">Agent Communication</h3>
-                  {messages.length > 0 && (
-                    <span className="text-sm text-muted-foreground">
-                      ({messages.length} messages)
-                    </span>
-                  )}
+              {/* 3D Agent Network - Collapsible */}
+              <Collapsible open={isNetworkOpen} onOpenChange={setIsNetworkOpen}>
+                <div className="flex items-center justify-between">
+                  <CollapsibleTrigger asChild>
+                    <Button variant="ghost" className="flex w-full justify-between p-0 hover:bg-transparent">
+                      <div className="flex items-center gap-2">
+                        <Network className="h-5 w-5 text-primary" />
+                        <h3 className="text-lg font-semibold">Agent Network</h3>
+                      </div>
+                      {isNetworkOpen ? (
+                        <ChevronUp className="h-5 w-5 text-muted-foreground" />
+                      ) : (
+                        <ChevronDown className="h-5 w-5 text-muted-foreground" />
+                      )}
+                    </Button>
+                  </CollapsibleTrigger>
                 </div>
-                <MessageList messages={messages} />
-              </div>
+                <CollapsibleContent className="mt-3">
+                  <AgentNetwork
+                    messages={messages}
+                    agentMetrics={agentMetrics}
+                    isProcessing={isProcessing}
+                  />
+                </CollapsibleContent>
+              </Collapsible>
+
+              <Separator />
+
+              {/* Message Flow - Collapsible */}
+              <Collapsible open={isMessagesOpen} onOpenChange={setIsMessagesOpen}>
+                <div className="flex items-center justify-between">
+                  <CollapsibleTrigger asChild>
+                    <Button variant="ghost" className="flex w-full justify-between p-0 hover:bg-transparent">
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-lg font-semibold">Agent Communication</h3>
+                        {messages.length > 0 && (
+                          <span className="text-sm text-muted-foreground">
+                            ({messages.length} messages)
+                          </span>
+                        )}
+                      </div>
+                      {isMessagesOpen ? (
+                        <ChevronUp className="h-5 w-5 text-muted-foreground" />
+                      ) : (
+                        <ChevronDown className="h-5 w-5 text-muted-foreground" />
+                      )}
+                    </Button>
+                  </CollapsibleTrigger>
+                </div>
+                <CollapsibleContent className="mt-3">
+                  <div className="relative">
+                    <MessageList messages={messages} height={messagesHeight} />
+                    {/* Resize Handle */}
+                    <div 
+                      className="absolute bottom-0 left-0 right-0 h-2 cursor-ns-resize bg-primary/20 hover:bg-primary/40 transition-colors"
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        const startY = e.clientY;
+                        const startHeight = messagesHeight;
+
+                        const handleMouseMove = (e: MouseEvent) => {
+                          const deltaY = e.clientY - startY;
+                          const newHeight = Math.max(300, Math.min(1000, startHeight + deltaY));
+                          setMessagesHeight(newHeight);
+                        };
+
+                        const handleMouseUp = () => {
+                          document.removeEventListener('mousemove', handleMouseMove);
+                          document.removeEventListener('mouseup', handleMouseUp);
+                        };
+
+                        document.addEventListener('mousemove', handleMouseMove);
+                        document.addEventListener('mouseup', handleMouseUp);
+                      }}
+                      title="Drag to resize"
+                    />
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
 
               {/* Metrics */}
               {agentMetrics.length > 0 && (

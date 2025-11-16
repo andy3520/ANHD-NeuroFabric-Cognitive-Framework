@@ -3,10 +3,13 @@ import { AgentType } from "./constants";
 export interface Message {
   id: string;
   from: AgentType;
+  fromInstanceId?: string; // e.g., "coordinator-1", "analyst-2"
   to: AgentType | "user" | "system";
+  toInstanceId?: string;
   content: string;
   timestamp: number;
   type: "request" | "response" | "info";
+  parentMessageId?: string; // For threading
 }
 
 export interface AgentMetrics {
