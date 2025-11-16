@@ -1,0 +1,20 @@
+# ANHD-NeuroFabric MVP Demo Dependencies
+
+# Core LLM Integration
+litellm>=1.44.0
+openai>=1.3.0
+
+# Message Protocol & Data Validation
+pydantic>=2.5.0
+pyyaml>=6.0.1
+
+# Async & Concurrency
+asyncio-mqtt>=0.16.1
+
+# Optional: Vector Embeddings (for future semantic routing)
+# sentence-transformers>=2.2.0
+
+# Development & Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+python-dotenv>=1.0.0

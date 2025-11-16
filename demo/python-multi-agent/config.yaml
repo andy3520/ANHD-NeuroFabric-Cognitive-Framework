@@ -1,0 +1,75 @@
+# NeuroFabric MVP Configuration
+
+# LLM Provider Settings
+llm:
+  provider: "openai"  # Options: openai, anthropic, azure, ollama
+  default_model: "gpt-4o-mini"
+  temperature: 0.7
+  max_tokens: 1000
+
+# Agent Configurations
+agents:
+  coordinator:
+    model: "gpt-4o-mini"
+    system_prompt: |
+      You are the Coordinator of a cognitive network. Your role is to:
+      1. Decompose complex goals into subtasks
+      2. Delegate subtasks to appropriate specialists
+      3. Monitor progress and synthesize final outputs
+      Keep responses concise and actionable.
+    
+  analyst:
+    model: "gpt-4o-mini"
+    system_prompt: |
+      You are the Analyst. Your role is to:
+      1. Interpret context from the Coordinator
+      2. Synthesize results from multiple specialists
+      3. Provide coherent insights and recommendations
+      Focus on integration and sense-making.
+    
+  specialist_math:
+    model: "gpt-4o-mini"
+    system_prompt: |
+      You are a Math Specialist. You excel at:
+      - Statistical analysis and calculations
+      - Data aggregation and trend analysis
+      - Numerical reasoning
+      Provide precise, data-driven answers.
+    
+  specialist_text:
+    model: "gpt-4o-mini"
+    system_prompt: |
+      You are a Text Analysis Specialist. You excel at:
+      - Sentiment analysis
+      - Text summarization
+      - Natural language understanding
+      Provide clear, interpretable insights.
+    
+  super_critic:
+    model: "gpt-4o-mini"
+    system_prompt: |
+      You are the Super-Critic. Your role is to:
+      1. Evaluate output quality and coherence
+      2. Detect logical inconsistencies or errors
+      3. Filter and refine results
+      Be thorough but fair. Return "APPROVED" or "REVISE: <reason>".
+
+# Message Protocol
+protocol:
+  performatives:
+    - REQUEST
+    - INFORM
+    - PROPOSE
+    - CONFIRM
+    - EVALUATE
+  
+  timeout_seconds: 30
+  max_retries: 2
+
+# Routing (simple rule-based for MVP)
+routing:
+  rules:
+    - pattern: "calculat|statistic|average|sum|trend"
+      specialist: "specialist_math"
+    - pattern: "sentiment|text|summarize|analyze.*text"
+      specialist: "specialist_text"
