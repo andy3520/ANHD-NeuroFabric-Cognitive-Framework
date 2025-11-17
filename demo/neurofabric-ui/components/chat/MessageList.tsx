@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Message } from "@/lib/types";
 import { AGENT_COLORS, AGENT_LABELS } from "@/lib/constants";
-import { Bot, User, Info, ArrowRight, ChevronRight, ChevronDown } from "lucide-react";
+import { Bot, User, Info, ArrowRight, ChevronRight, ChevronDown, Brain } from "lucide-react";
 
 interface MessageListProps {
   messages: Message[];
@@ -202,6 +202,29 @@ function MessageItem({ message }: { message: Message }) {
           <p className="text-sm text-muted-foreground leading-relaxed break-words whitespace-normal">
             {message.content}
           </p>
+          
+          {/* Memory Usage Indicator */}
+          {message.memoryUsed && message.memoryUsed.length > 0 && (
+            <div className="mt-2 space-y-1">
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <Brain className="h-3 w-3" />
+                <span>Using {message.memoryUsed.length} memory{message.memoryUsed.length > 1 ? 'ies' : ''}:</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {message.memoryUsed.map((mem) => (
+                  <Badge
+                    key={mem.memoryId}
+                    variant="outline"
+                    className="text-xs gap-1"
+                    title={mem.task}
+                  >
+                    <Brain className="h-3 w-3" />
+                    {(mem.similarity * 100).toFixed(0)}% match
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

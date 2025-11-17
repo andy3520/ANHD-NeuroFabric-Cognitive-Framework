@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -669,12 +670,16 @@ Recommendation: Focus on improving quality consistency while maintaining the str
             <h1 className="text-xl font-bold">NeuroFabric</h1>
           </div>
           <nav className="flex items-center gap-4">
-            <Button variant="ghost" size="sm">
-              About
-            </Button>
-            <Button variant="ghost" size="sm">
-              Docs
-            </Button>
+            <Link href="/about">
+              <Button variant="ghost" size="sm">
+                About
+              </Button>
+            </Link>
+            <Link href="/docs">
+              <Button variant="ghost" size="sm">
+                Docs
+              </Button>
+            </Link>
           </nav>
         </div>
       </header>

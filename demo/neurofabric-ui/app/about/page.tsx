@@ -4,14 +4,16 @@ import Link from "next/link";
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+    <div className="min-h-screen bg-linear-to-b from-background to-muted/20">
       <main className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Header */}
         <div className="mb-12 text-center">
           <div className="mb-4 flex justify-center">
             <Brain className="h-16 w-16 text-primary" />
           </div>
-          <h1 className="mb-4 text-4xl font-bold tracking-tight">About NeuroFabric</h1>
+          <h1 className="mb-4 text-4xl font-bold tracking-tight">
+            About NeuroFabric
+          </h1>
           <p className="text-lg text-muted-foreground">
             A Modular Synthetic Brain Architecture for Efficient AI
           </p>
@@ -23,10 +25,16 @@ export default function AboutPage() {
           <Card className="p-8">
             <h2 className="mb-4 text-2xl font-bold">Our Vision</h2>
             <p className="mb-4 leading-relaxed text-muted-foreground">
-              ANHD-NeuroFabric reimagines artificial cognition not as a single massive model but as a <strong>living cognitive network</strong> of cooperating, specialized AI agents that interact like neurons in a brain.
+              ANHD-NeuroFabric reimagines artificial cognition not as a single
+              massive model but as a <strong>living cognitive network</strong>{" "}
+              of cooperating, specialized AI agents that interact like neurons
+              in a brain.
             </p>
             <p className="leading-relaxed text-muted-foreground">
-              Modern AI scales primarily by adding parameters and extending context windows. NeuroFabric proposes a more <strong>organic and efficient approach</strong>: scaling through modularity, cooperation, and adaptive orchestration.
+              Modern AI scales primarily by adding parameters and extending
+              context windows. NeuroFabric proposes a more{" "}
+              <strong>organic and efficient approach</strong>: scaling through
+              modularity, cooperation, and adaptive orchestration.
             </p>
           </Card>
 
@@ -34,13 +42,15 @@ export default function AboutPage() {
           <Card className="p-8">
             <h2 className="mb-4 text-2xl font-bold">The Architecture</h2>
             <p className="mb-6 leading-relaxed text-muted-foreground">
-              NeuroFabric organizes cognition into five core regions, mirroring the modular architecture of the human brain:
+              NeuroFabric organizes cognition into five core regions, mirroring
+              the modular architecture of the human brain:
             </p>
             <div className="space-y-4">
               <div className="border-l-4 border-purple-500 pl-4">
                 <h3 className="font-semibold">Coordinator</h3>
                 <p className="text-sm text-muted-foreground">
-                  Global controller that decomposes goals, delegates subtasks, and monitors progress
+                  Global controller that decomposes goals, delegates subtasks,
+                  and monitors progress
                 </p>
               </div>
               <div className="border-l-4 border-blue-500 pl-4">
@@ -52,19 +62,22 @@ export default function AboutPage() {
               <div className="border-l-4 border-green-500 pl-4">
                 <h3 className="font-semibold">Specialists</h3>
                 <p className="text-sm text-muted-foreground">
-                  Perform concrete subtasks (reasoning, coding, retrieval, perception)
+                  Perform concrete subtasks (reasoning, coding, retrieval,
+                  perception)
                 </p>
               </div>
               <div className="border-l-4 border-red-500 pl-4">
                 <h3 className="font-semibold">Super-Critic</h3>
                 <p className="text-sm text-muted-foreground">
-                  Evaluates and filters outputs, detects inefficiencies, enforces quality
+                  Evaluates and filters outputs, detects inefficiencies,
+                  enforces quality
                 </p>
               </div>
               <div className="border-l-4 border-orange-500 pl-4">
                 <h3 className="font-semibold">Memory & Consolidation</h3>
                 <p className="text-sm text-muted-foreground">
-                  Stores experiences, reinforces successful pathways, prunes failing ones
+                  Stores experiences, reinforces successful pathways, prunes
+                  failing ones
                 </p>
               </div>
             </div>
@@ -75,27 +88,39 @@ export default function AboutPage() {
             <h2 className="mb-4 text-2xl font-bold">Key Advantages</h2>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <h3 className="mb-2 font-semibold text-green-600">✓ Cost Efficiency</h3>
+                <h3 className="mb-2 font-semibold text-green-600">
+                  ✓ Cost Efficiency
+                </h3>
                 <p className="text-sm text-muted-foreground">
-                  Up to 53% cost reduction through distributed processing and adaptive scaling
+                  Up to 53% cost reduction through distributed processing and
+                  adaptive scaling
                 </p>
               </div>
               <div>
-                <h3 className="mb-2 font-semibold text-green-600">✓ Faster Processing</h3>
+                <h3 className="mb-2 font-semibold text-green-600">
+                  ✓ Faster Processing
+                </h3>
                 <p className="text-sm text-muted-foreground">
-                  Parallel agent execution reduces total processing time significantly
+                  Parallel agent execution reduces total processing time
+                  significantly
                 </p>
               </div>
               <div>
-                <h3 className="mb-2 font-semibold text-green-600">✓ Token Efficiency</h3>
+                <h3 className="mb-2 font-semibold text-green-600">
+                  ✓ Token Efficiency
+                </h3>
                 <p className="text-sm text-muted-foreground">
-                  Linear scaling vs exponential growth of traditional context windows
+                  Linear scaling vs exponential growth of traditional context
+                  windows
                 </p>
               </div>
               <div>
-                <h3 className="mb-2 font-semibold text-green-600">✓ Transparency</h3>
+                <h3 className="mb-2 font-semibold text-green-600">
+                  ✓ Transparency
+                </h3>
                 <p className="text-sm text-muted-foreground">
-                  Fully inspectable agent communication and decision-making process
+                  Fully inspectable agent communication and decision-making
+                  process
                 </p>
               </div>
             </div>
@@ -108,7 +133,8 @@ export default function AboutPage() {
               <strong>Nguyen Hieu Duc An (Andy H. Nguyen)</strong>
             </p>
             <p className="mb-4 text-sm text-muted-foreground">
-              Independent AI systems researcher exploring modular synthetic cognition and emergent intelligence frameworks.
+              Independent AI systems researcher exploring modular synthetic
+              cognition and emergent intelligence frameworks.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
@@ -119,7 +145,7 @@ export default function AboutPage() {
                 nguyenhieuducan@gmail.com
               </Link>
               <Link
-                href="https://github.com/andyh-nguyen/ANHD-NeuroFabric-Cognitive-Framework"
+                href="https://github.com/andy3520/ANHD-NeuroFabric-Cognitive-Framework"
                 className="flex items-center gap-2 text-sm text-primary hover:underline"
                 target="_blank"
               >
@@ -133,10 +159,12 @@ export default function AboutPage() {
           <Card className="p-8">
             <h2 className="mb-4 text-2xl font-bold">License</h2>
             <p className="text-sm text-muted-foreground">
-              Creative Commons Attribution – NonCommercial 4.0 International (CC BY-NC 4.0)
+              Creative Commons Attribution – NonCommercial 4.0 International (CC
+              BY-NC 4.0)
             </p>
             <p className="mt-2 text-xs text-muted-foreground">
-              You may share and adapt this work with attribution for non-commercial use.
+              You may share and adapt this work with attribution for
+              non-commercial use.
             </p>
           </Card>
 
@@ -148,7 +176,9 @@ export default function AboutPage() {
                   <FileText className="h-8 w-8 text-primary" />
                   <div>
                     <h3 className="font-semibold">Documentation</h3>
-                    <p className="text-xs text-muted-foreground">Read the full whitepaper</p>
+                    <p className="text-xs text-muted-foreground">
+                      Read the full whitepaper
+                    </p>
                   </div>
                 </div>
               </Card>
@@ -159,7 +189,9 @@ export default function AboutPage() {
                   <Brain className="h-8 w-8 text-primary" />
                   <div>
                     <h3 className="font-semibold">Try the Demo</h3>
-                    <p className="text-xs text-muted-foreground">Experience NeuroFabric</p>
+                    <p className="text-xs text-muted-foreground">
+                      Experience NeuroFabric
+                    </p>
                   </div>
                 </div>
               </Card>

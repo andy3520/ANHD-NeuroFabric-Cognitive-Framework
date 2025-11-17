@@ -10,6 +10,11 @@ export interface Message {
   timestamp: number;
   type: "request" | "response" | "info";
   parentMessageId?: string; // For threading
+  memoryUsed?: {
+    memoryId: string;
+    task: string;
+    similarity: number;
+  }[]; // Memories used by this agent for this message
 }
 
 export interface AgentMetrics {

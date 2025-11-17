@@ -26,7 +26,7 @@ export default function DocsPage() {
 
         {/* Quick Links */}
         <div className="grid gap-4 sm:grid-cols-3 mb-8">
-          <Link href="/WHITEPAPER.md" target="_blank">
+          <Link href="/whitepaper">
             <Card className="p-4 cursor-pointer transition-all hover:border-primary hover:shadow-md">
               <div className="flex items-center gap-3">
                 <Download className="h-6 w-6 text-primary" />
@@ -48,7 +48,7 @@ export default function DocsPage() {
               </div>
             </Card>
           </Link>
-          <Link href="https://github.com/andyh-nguyen/ANHD-NeuroFabric-Cognitive-Framework" target="_blank">
+          <Link href="https://github.com/andy3520/ANHD-NeuroFabric-Cognitive-Framework" target="_blank">
             <Card className="p-4 cursor-pointer transition-all hover:border-primary hover:shadow-md">
               <div className="flex items-center gap-3">
                 <Download className="h-6 w-6 text-primary" />
