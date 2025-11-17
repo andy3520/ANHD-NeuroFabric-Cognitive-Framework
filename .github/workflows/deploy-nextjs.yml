@@ -77,11 +77,11 @@ jobs:
   build:
     # Job name that appears in GitHub Actions UI
     name: Build Next.js Application
-    
+
     # The type of machine to run the job on
     # ubuntu-latest is a Linux machine provided by GitHub for free
     runs-on: ubuntu-latest
-    
+
     # --------------------------------------------------------------------------
     # STEPS
     # --------------------------------------------------------------------------
@@ -158,11 +158,11 @@ jobs:
   # It runs AFTER the build job completes successfully
   deploy:
     name: Deploy to GitHub Pages
-    
+
     # This job depends on the "build" job
     # It won't start until "build" completes successfully
     needs: build
-    
+
     # Deploy to the GitHub Pages environment
     # This creates a deployment in the GitHub UI you can track
     environment:
@@ -170,9 +170,9 @@ jobs:
       # This URL will be where your site is live
       # ${{ steps.deployment.outputs.page_url }} is set by the deploy action
       url: ${{ steps.deployment.outputs.page_url }}
-    
+
     runs-on: ubuntu-latest
-    
+
     steps:
       # STEP 1: Deploy to GitHub Pages
       # This takes the artifact uploaded in the build job and deploys it
