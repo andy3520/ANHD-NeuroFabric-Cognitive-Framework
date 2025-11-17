@@ -7,13 +7,15 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Brain, Sparkles, BarChart3, ChevronDown, ChevronUp, Loader2 } from "lucide-react";
+import { Brain, Sparkles, BarChart3, ChevronDown, ChevronUp, Loader2, FileDown, FileJson, FileText, Info } from "lucide-react";
 import ChatInterface from "@/components/chat/ChatInterface";
 import MessageList from "@/components/chat/MessageList";
 import MetricsDashboard from "@/components/metrics/MetricsDashboard";
 import TraditionalView from "@/components/traditional/TraditionalView";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Message, AgentMetrics } from "@/lib/types";
+import { exportToJSON, exportToMarkdown } from "@/lib/export";
+import Link from "next/link";
 
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -52,6 +54,22 @@ export default function Home() {
     setTraditionalMetrics(null);
     setComparisonTask("");
     setComparisonProcessing(false);
+  };
+
+  const handleExport = (format: "json" | "markdown") => {
+    const exportData = {
+      task: messages[0]?.content || "",
+      messages,
+      metrics: agentMetrics,
+      finalAnswer,
+      timestamp: Date.now(),
+    };
+
+    if (format === "json") {
+      exportToJSON(exportData);
+    } else {
+      exportToMarkdown(exportData);
+    }
   };
 
   const handleTaskSubmit = async (task: string) => {
@@ -659,9 +677,33 @@ Recommendation: Focus on improving quality consistency while maintaining the str
               {(messages.length > 0 || isProcessing) && (
                 <>
                   <div>
-                    <div className="mb-3 flex items-center gap-2">
-                      <Sparkles className="h-5 w-5 text-primary" />
-                      <h3 className="text-lg font-semibold">Final Answer</h3>
+                    <div className="mb-3 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="h-5 w-5 text-primary" />
+                        <h3 className="text-lg font-semibold">Final Answer</h3>
+                      </div>
+                      {finalAnswer && !isProcessing && (
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleExport("json")}
+                            className="gap-2"
+                          >
+                            <FileJson className="h-4 w-4" />
+                            <span className="hidden sm:inline">JSON</span>
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleExport("markdown")}
+                            className="gap-2"
+                          >
+                            <FileDown className="h-4 w-4" />
+                            <span className="hidden sm:inline">Markdown</span>
+                          </Button>
+                        </div>
+                      )}
                     </div>
                     <Card className="p-6 border-2 border-primary/20 bg-primary/5">
                       {isProcessing && !finalAnswer ? (
