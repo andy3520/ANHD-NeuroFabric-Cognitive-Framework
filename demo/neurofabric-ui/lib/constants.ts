@@ -1,0 +1,186 @@
+// Design system constants
+
+export const AGENT_COLORS = {
+  coordinator: "#8b5cf6", // purple
+  analyst: "#3b82f6", // blue
+  specialist_math: "#10b981", // green
+  specialist_text: "#f59e0b", // orange
+  super_critic: "#ef4444", // red
+  traditional: "#6366f1", // indigo
+} as const;
+
+export const AGENT_LABELS = {
+  coordinator: "Coordinator",
+  analyst: "Analyst",
+  specialist_math: "Math Specialist",
+  specialist_text: "Text Specialist",
+  super_critic: "Super-Critic",
+  traditional: "Traditional AI",
+} as const;
+
+export type AgentType = keyof typeof AGENT_COLORS;
+
+export const CATEGORY_COLORS = {
+  "Data Analysis": "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800",
+  "Legal & Compliance": "bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-950 dark:text-purple-300 dark:border-purple-800",
+  "Research & Education": "bg-green-100 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800",
+  "Business Intelligence": "bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-300 dark:border-orange-800",
+  "Content Creation": "bg-pink-100 text-pink-700 border-pink-200 dark:bg-pink-950 dark:text-pink-300 dark:border-pink-800",
+  "Technical Support": "bg-cyan-100 text-cyan-700 border-cyan-200 dark:bg-cyan-950 dark:text-cyan-300 dark:border-cyan-800",
+} as const;
+
+export const EXAMPLE_TASKS = [
+  {
+    id: 1,
+    category: "Data Analysis",
+    title: "Simple Analysis",
+    description: "5 reviews - baseline comparison",
+    prompt: `Analyze these customer reviews and provide insights:
+
+Reviews:
+1. "Great product! Very satisfied. Rating: 5/5"
+2. "Decent quality but overpriced. Rating: 3/5"
+3. "Excellent service and fast delivery! Rating: 5/5"
+4. "Not what I expected, disappointed. Rating: 2/5"
+5. "Amazing value for money! Rating: 4/5"
+
+Calculate the average rating and analyze overall sentiment trends.`,
+  },
+  {
+    id: 2,
+    category: "Data Analysis",
+    title: "Medium-Scale Analysis 📊",
+    description: "50 reviews - shows token efficiency",
+    prompt: `Analyze 50 customer reviews for a comprehensive business report:
+
+Provide:
+- Statistical breakdown of ratings (distribution, mean, median, variance)
+- Sentiment analysis with positive/negative/neutral percentages
+- Top 5 recurring themes or topics mentioned
+- Key strengths and weaknesses identified
+- Customer satisfaction trend (improving/declining/stable)
+- Actionable recommendations for improvement
+
+This requires processing substantial data and synthesizing insights.`,
+  },
+  {
+    id: 3,
+    category: "Data Analysis",
+    title: "Large-Scale Deep Analysis 🔥",
+    description: "500 reviews - demonstrates massive savings",
+    prompt: `Perform comprehensive analysis of 500 customer reviews:
+
+Deep analysis requirements:
+- Full statistical analysis: mean, median, mode, standard deviation, confidence intervals
+- Sentiment analysis with emotion classification (joy, frustration, satisfaction, etc.)
+- Theme extraction and categorization across all reviews
+- Temporal trend analysis (quarterly performance over 18 months)
+- Customer segmentation (promoters, passives, detractors)
+- Correlation analysis between rating factors
+- Geographic/demographic patterns (if mentioned)
+- Product quality vs service quality breakdown
+- Competitive positioning insights
+- Risk assessment and early warning indicators
+- Detailed actionable recommendations with priority ranking
+- ROI impact estimation for recommendations
+
+Deliver a comprehensive executive report with data-driven insights.`,
+  },
+  {
+    id: 4,
+    category: "Legal & Compliance",
+    title: "Multi-Document Legal Analysis ⚖️",
+    description: "Contract review - context window challenge",
+    prompt: `Analyze these 3 legal contracts for conflicts and risks:
+
+Contract A (Employment): Standard terms, 2-year duration, non-compete clause
+Contract B (Partnership): Revenue sharing 60/40, IP ownership unclear
+Contract C (NDA): 5-year confidentiality, broad definition of trade secrets
+
+Identify:
+- Conflicting clauses between contracts
+- Legal risks and exposure
+- Missing critical terms
+- Recommendations for amendments
+- Priority issues requiring immediate attention`,
+  },
+  {
+    id: 5,
+    category: "Research & Education",
+    title: "Research Paper Synthesis 📚",
+    description: "Multi-source synthesis task",
+    prompt: `Synthesize findings from 5 research papers on AI safety:
+
+Papers cover: alignment, interpretability, robustness, fairness, privacy
+
+Provide:
+- Key findings from each paper
+- Common themes across papers
+- Conflicting viewpoints or contradictions
+- Research gaps identified
+- Practical implications for AI development
+- Future research directions suggested
+
+Synthesize a coherent overview connecting all papers.`,
+  },
+  {
+    id: 6,
+    category: "Business Intelligence",
+    title: "Market Trend Analysis 📈",
+    description: "Financial data analysis",
+    prompt: `Analyze quarterly sales data and market trends:
+
+Q1: Revenue $2.5M, Growth 15%, Market share 12%
+Q2: Revenue $2.3M, Growth -8%, Market share 11%
+Q3: Revenue $2.8M, Growth 22%, Market share 13%
+Q4: Revenue $3.1M, Growth 11%, Market share 14%
+
+Provide:
+- Year-over-year performance summary
+- Trend analysis and seasonality patterns
+- Market position assessment
+- Risk factors identified
+- Strategic recommendations for next year`,
+  },
+  {
+    id: 7,
+    category: "Content Creation",
+    title: "Product Description Generator ✨",
+    description: "Creative writing with quality validation",
+    prompt: `Write a compelling product description for a smart home thermostat:
+
+Features:
+- AI-powered temperature learning
+- Energy savings up to 30%
+- Mobile app control
+- Voice assistant compatible
+- Eco-friendly design
+
+Create a description that:
+- Highlights key benefits
+- Addresses customer pain points
+- Includes emotional appeal
+- Is SEO-friendly
+- Maintains professional tone`,
+  },
+  {
+    id: 8,
+    category: "Technical Support",
+    title: "Troubleshooting Guide Creation 🔧",
+    description: "Technical documentation",
+    prompt: `Create a troubleshooting guide for common WiFi connectivity issues:
+
+Cover these scenarios:
+- Cannot connect to network
+- Intermittent connection drops
+- Slow internet speed
+- Device not detected
+- Password incorrect errors
+
+For each issue provide:
+- Possible causes
+- Step-by-step solutions
+- Prevention tips
+- When to contact support`,
+  },
+];
