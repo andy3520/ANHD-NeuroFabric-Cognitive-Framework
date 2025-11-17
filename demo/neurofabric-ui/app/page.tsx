@@ -12,6 +12,7 @@ import ChatInterface from "@/components/chat/ChatInterface";
 import MessageList from "@/components/chat/MessageList";
 import MetricsDashboard from "@/components/metrics/MetricsDashboard";
 import TraditionalView from "@/components/traditional/TraditionalView";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Message, AgentMetrics } from "@/lib/types";
 
 export default function Home() {
@@ -38,6 +39,20 @@ export default function Home() {
   // Side-by-side comparison state
   const [comparisonTask, setComparisonTask] = useState("");
   const [comparisonProcessing, setComparisonProcessing] = useState(false);
+
+  // Reset function for tab changes
+  const resetAllStates = () => {
+    setMessages([]);
+    setAgentMetrics([]);
+    setIsProcessing(false);
+    setFinalAnswer("");
+    setTraditionalTask("");
+    setTraditionalProcessing(false);
+    setTraditionalResponse("");
+    setTraditionalMetrics(null);
+    setComparisonTask("");
+    setComparisonProcessing(false);
+  };
 
   const handleTaskSubmit = async (task: string) => {
     setIsProcessing(true);
@@ -615,7 +630,7 @@ Recommendation: Focus on improving quality consistency while maintaining the str
           </div>
 
           {/* Mode Selection */}
-          <Tabs defaultValue="fabric" className="w-full">
+          <Tabs defaultValue="fabric" className="w-full" onValueChange={resetAllStates}>
             <TabsList className="grid w-full grid-cols-3 h-auto">
               <TabsTrigger value="fabric" className="text-xs sm:text-sm whitespace-nowrap px-2 sm:px-4">
                 <span className="hidden sm:inline">NeuroFabric Demo</span>
@@ -955,29 +970,46 @@ Recommendation: Focus on improving quality consistency while maintaining the str
               </div>
 
               {/* Comparison Summary */}
-              {finalAnswer && traditionalResponse && !comparisonProcessing && (
+              {comparisonTask && (
                 <Card className="p-6 bg-gradient-to-r from-primary/5 to-orange-500/5">
                   <h3 className="text-lg font-semibold mb-4">📊 Performance Comparison</h3>
-                  <div className="grid gap-4 sm:grid-cols-3">
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-2">Speed Improvement</p>
-                      <p className="text-2xl font-bold text-green-600">
-                        {traditionalMetrics ? ((1 - totalMetrics.time / traditionalMetrics.time) * 100).toFixed(1) : '0'}% faster
-                      </p>
+                  {comparisonProcessing ? (
+                    <div className="grid gap-4 sm:grid-cols-3">
+                      <div className="space-y-2">
+                        <p className="text-sm text-muted-foreground">Speed Improvement</p>
+                        <Skeleton className="h-8 w-32" />
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-sm text-muted-foreground">Cost Savings</p>
+                        <Skeleton className="h-8 w-32" />
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-sm text-muted-foreground">Token Efficiency</p>
+                        <Skeleton className="h-8 w-32" />
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-2">Cost Savings</p>
-                      <p className="text-2xl font-bold text-green-600">
-                        {traditionalMetrics ? ((1 - totalMetrics.cost / traditionalMetrics.cost) * 100).toFixed(1) : '0'}% cheaper
-                      </p>
+                  ) : finalAnswer && traditionalResponse && traditionalMetrics ? (
+                    <div className="grid gap-4 sm:grid-cols-3">
+                      <div>
+                        <p className="text-sm text-muted-foreground mb-2">Speed Improvement</p>
+                        <p className="text-2xl font-bold text-green-600">
+                          {((1 - totalMetrics.time / traditionalMetrics.time) * 100).toFixed(1)}% faster
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground mb-2">Cost Savings</p>
+                        <p className="text-2xl font-bold text-green-600">
+                          {((1 - totalMetrics.cost / traditionalMetrics.cost) * 100).toFixed(1)}% cheaper
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground mb-2">Token Efficiency</p>
+                        <p className="text-2xl font-bold text-green-600">
+                          {((1 - totalMetrics.tokens / traditionalMetrics.tokens) * 100).toFixed(1)}% fewer tokens
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-2">Token Efficiency</p>
-                      <p className="text-2xl font-bold text-green-600">
-                        {traditionalMetrics ? ((1 - totalMetrics.tokens / traditionalMetrics.tokens) * 100).toFixed(1) : '0'}% fewer tokens
-                      </p>
-                    </div>
-                  </div>
+                  ) : null}
                 </Card>
               )}
 
