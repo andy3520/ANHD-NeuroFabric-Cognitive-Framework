@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Brain, Sparkles, BarChart3, ChevronDown, ChevronUp } from "lucide-react";
+import { Brain, Sparkles, BarChart3, ChevronDown, ChevronUp, Loader2 } from "lucide-react";
 import ChatInterface from "@/components/chat/ChatInterface";
 import MessageList from "@/components/chat/MessageList";
 import MetricsDashboard from "@/components/metrics/MetricsDashboard";
@@ -30,9 +30,13 @@ export default function Home() {
     cost: number;
     tokens: number;
   } | null>(null);
+  
+  // Final answer state
+  const [finalAnswer, setFinalAnswer] = useState("");
 
   const handleTaskSubmit = async (task: string) => {
     setIsProcessing(true);
+    setFinalAnswer(""); // Clear previous answer
     
     // Add user message
     const userMessage: Message = {
@@ -190,6 +194,24 @@ export default function Home() {
 
     // Update metrics after processing
     setAgentMetrics(mockMetrics);
+    
+    // Set final answer
+    setFinalAnswer(`Based on analyzing the reviews, here's my assessment:
+
+Average Rating: 3.8 out of 5 stars
+The overall rating suggests generally positive customer satisfaction, though there is room for improvement.
+
+Sentiment Analysis:
+• 60% Positive feedback
+• 20% Neutral comments
+• 20% Negative feedback
+
+Key Findings:
+1. Service Quality: Customers consistently praise the excellent service and helpful staff.
+2. Value for Money: Many reviewers mention good value and fair pricing.
+3. Product Quality: This appears to be the main area of concern, with mixed opinions. Some customers love the quality while others found it inconsistent.
+
+Recommendation: Focus on improving quality consistency while maintaining the strong service standards and competitive pricing that customers appreciate.`);
   };
 
   const handleTraditionalTaskSubmit = async (task: string) => {
@@ -295,6 +317,47 @@ Recommendation: Focus on improving quality consistency while maintaining the str
               </div>
 
               <Separator />
+
+              {/* Final Answer Section */}
+              {(messages.length > 0 || isProcessing) && (
+                <>
+                  <div>
+                    <div className="mb-3 flex items-center gap-2">
+                      <Sparkles className="h-5 w-5 text-primary" />
+                      <h3 className="text-lg font-semibold">Final Answer</h3>
+                    </div>
+                    <Card className="p-6 border-2 border-primary/20 bg-primary/5">
+                      {isProcessing && !finalAnswer ? (
+                        <div className="space-y-4 py-8">
+                          <div className="flex items-start gap-3">
+                            <div className="flex-shrink-0">
+                              <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                            </div>
+                            <div className="space-y-2 flex-1">
+                              <p className="text-sm text-muted-foreground">
+                                Agents are collaborating to generate the final answer...
+                              </p>
+                              <div className="space-y-2">
+                                <div className="h-2 bg-muted rounded-full overflow-hidden">
+                                  <div className="h-full bg-primary animate-pulse w-2/3 transition-all" />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ) : finalAnswer ? (
+                        <div className="prose prose-sm max-w-none">
+                          <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+                            {finalAnswer}
+                          </p>
+                        </div>
+                      ) : null}
+                    </Card>
+                  </div>
+
+                  <Separator />
+                </>
+              )}
 
               {/* Message Flow - Collapsible */}
               <Collapsible open={isMessagesOpen} onOpenChange={setIsMessagesOpen}>
