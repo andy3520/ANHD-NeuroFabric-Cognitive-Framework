@@ -75,7 +75,7 @@ function ComparisonCard({
   fabricValue,
   traditionalValue,
   difference,
-  unit,
+  _unit // eslint-disable-line @typescript-eslint/no-unused-vars
 }: ComparisonCardProps) {
   const isLower = difference < 0;
   const isEqual = Math.abs(difference) < 1;

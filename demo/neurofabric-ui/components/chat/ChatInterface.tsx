@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Send, Sparkles, ChevronDown, ChevronUp } from "lucide-react";
-import { EXAMPLE_TASKS } from "@/lib/constants";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Send, Sparkles, Search, X } from "lucide-react";
+import { EXAMPLE_TASKS, CATEGORY_COLORS } from "@/lib/constants";
 
 interface ChatInterfaceProps {
   onSubmit: (task: string) => void;
@@ -15,7 +16,8 @@ interface ChatInterfaceProps {
 
 export default function ChatInterface({ onSubmit, isProcessing = false }: ChatInterfaceProps) {
   const [input, setInput] = useState("");
-  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(["Data Analysis"]));
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
 
   const handleSubmit = () => {
     if (input.trim() && !isProcessing) {
@@ -37,23 +39,46 @@ export default function ChatInterface({ onSubmit, isProcessing = false }: ChatIn
     }
   };
 
-  const toggleCategory = (category: string) => {
-    const newExpanded = new Set(expandedCategories);
-    if (newExpanded.has(category)) {
-      newExpanded.delete(category);
+  const toggleTag = (tag: string) => {
+    const newTags = new Set(selectedTags);
+    if (newTags.has(tag)) {
+      newTags.delete(tag);
     } else {
-      newExpanded.add(category);
+      newTags.add(tag);
     }
-    setExpandedCategories(newExpanded);
+    setSelectedTags(newTags);
   };
 
-  // Group tasks by category
-  const tasksByCategory = EXAMPLE_TASKS.reduce((acc, task) => {
-    const category = task.category || "Other";
-    if (!acc[category]) acc[category] = [];
-    acc[category].push(task);
-    return acc;
-  }, {} as Record<string, typeof EXAMPLE_TASKS>);
+  // Get all unique tags
+  const allTags = useMemo(() => {
+    const tags = new Set<string>();
+    EXAMPLE_TASKS.forEach(task => {
+      if (task.category) tags.add(task.category);
+    });
+    return Array.from(tags).sort();
+  }, []);
+
+  // Filter tasks based on search and selected tags
+  const filteredTasks = useMemo(() => {
+    return EXAMPLE_TASKS.filter(task => {
+      // Filter by selected tags
+      if (selectedTags.size > 0 && !selectedTags.has(task.category)) {
+        return false;
+      }
+
+      // Filter by search query
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase();
+        return (
+          task.title.toLowerCase().includes(query) ||
+          task.description.toLowerCase().includes(query) ||
+          task.category.toLowerCase().includes(query)
+        );
+      }
+
+      return true;
+    });
+  }, [searchQuery, selectedTags]);
 
   return (
     <div className="space-y-4">
@@ -62,46 +87,84 @@ export default function ChatInterface({ onSubmit, isProcessing = false }: ChatIn
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-primary" />
           <h3 className="text-sm font-medium">Example Tasks</h3>
+          <span className="text-xs text-muted-foreground">
+            ({filteredTasks.length} of {EXAMPLE_TASKS.length})
+          </span>
         </div>
-        
+
+        {/* Search and Filter */}
         <div className="space-y-2">
-          {Object.entries(tasksByCategory).map(([category, tasks]) => (
-            <Collapsible
-              key={category}
-              open={expandedCategories.has(category)}
-              onOpenChange={() => toggleCategory(category)}
-            >
-              <CollapsibleTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="w-full justify-between p-2 h-auto hover:bg-muted"
-                >
-                  <span className="text-sm font-medium">{category}</span>
-                  {expandedCategories.has(category) ? (
-                    <ChevronUp className="h-4 w-4" />
-                  ) : (
-                    <ChevronDown className="h-4 w-4" />
-                  )}
-                </Button>
-              </CollapsibleTrigger>
-              <CollapsibleContent className="mt-2">
-                <div className="grid gap-2 sm:grid-cols-2">
-                  {tasks.map((task) => (
-                    <Card
-                      key={task.id}
-                      className="cursor-pointer border-2 p-3 transition-all hover:border-primary hover:shadow-md"
-                      onClick={() => handleExampleClick(task.prompt)}
+          {/* Search Bar */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Search tasks..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 pr-9"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+
+          {/* Tag Filter */}
+          <div className="flex flex-wrap gap-2">
+            {allTags.map((tag) => (
+              <Badge
+                key={tag}
+                variant={selectedTags.has(tag) ? "default" : "outline"}
+                className={`cursor-pointer transition-all hover:scale-105 ${
+                  selectedTags.has(tag) 
+                    ? "" 
+                    : CATEGORY_COLORS[tag as keyof typeof CATEGORY_COLORS] || ""
+                }`}
+                onClick={() => toggleTag(tag)}
+              >
+                {tag}
+                {selectedTags.has(tag) && (
+                  <X className="ml-1 h-3 w-3" />
+                )}
+              </Badge>
+            ))}
+          </div>
+        </div>
+
+        {/* Task List */}
+        <div className="grid gap-2 sm:grid-cols-2">
+          {filteredTasks.length > 0 ? (
+            filteredTasks.map((task) => (
+              <Card
+                key={task.id}
+                className="cursor-pointer border-2 p-3 transition-all hover:border-primary hover:shadow-md"
+                onClick={() => handleExampleClick(task.prompt)}
+              >
+                <div className="space-y-2">
+                  <div className="flex items-start justify-between gap-2">
+                    <h4 className="font-medium text-sm flex-1">{task.title}</h4>
+                    <Badge 
+                      variant="secondary" 
+                      className={`text-xs shrink-0 ${
+                        CATEGORY_COLORS[task.category as keyof typeof CATEGORY_COLORS] || ""
+                      }`}
                     >
-                      <div className="space-y-1">
-                        <h4 className="font-medium text-sm">{task.title}</h4>
-                        <p className="text-xs text-muted-foreground">{task.description}</p>
-                      </div>
-                    </Card>
-                  ))}
+                      {task.category}
+                    </Badge>
+                  </div>
+                  <p className="text-xs text-muted-foreground">{task.description}</p>
                 </div>
-              </CollapsibleContent>
-            </Collapsible>
-          ))}
+              </Card>
+            ))
+          ) : (
+            <div className="col-span-2 text-center py-8 text-muted-foreground text-sm">
+              No tasks found. Try adjusting your search or filters.
+            </div>
+          )}
         </div>
       </div>
 

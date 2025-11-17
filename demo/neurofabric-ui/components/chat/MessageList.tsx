@@ -32,7 +32,6 @@ export default function MessageList({ messages, height = 400 }: MessageListProps
 
   // Build message tree
   const rootMessages = messages.filter(m => !m.parentMessageId);
-  const messageMap = new Map(messages.map(m => [m.id, m]));
   
   const getChildren = (messageId: string): Message[] => {
     return messages.filter(m => m.parentMessageId === messageId);
@@ -133,7 +132,7 @@ function MessageThread({
   );
 }
 
-function MessageItem({ message, level }: { message: Message; level: number }) {
+function MessageItem({ message }: { message: Message }) {
   const isUser = message.from === "user";
   const agentColor = isUser
     ? "#6366f1"
@@ -149,9 +148,6 @@ function MessageItem({ message, level }: { message: Message; level: number }) {
     ? "System"
     : AGENT_LABELS[message.to as keyof typeof AGENT_LABELS] || message.to;
 
-  const toAgentColor = message.to === "user" || message.to === "system"
-    ? "#6366f1"
-    : AGENT_COLORS[message.to as keyof typeof AGENT_COLORS] || "#6366f1";
 
   const Icon = isUser ? User : Bot;
 

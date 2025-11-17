@@ -20,6 +20,15 @@ export const AGENT_LABELS = {
 
 export type AgentType = keyof typeof AGENT_COLORS;
 
+export const CATEGORY_COLORS = {
+  "Data Analysis": "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800",
+  "Legal & Compliance": "bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-950 dark:text-purple-300 dark:border-purple-800",
+  "Research & Education": "bg-green-100 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800",
+  "Business Intelligence": "bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-300 dark:border-orange-800",
+  "Content Creation": "bg-pink-100 text-pink-700 border-pink-200 dark:bg-pink-950 dark:text-pink-300 dark:border-pink-800",
+  "Technical Support": "bg-cyan-100 text-cyan-700 border-cyan-200 dark:bg-cyan-950 dark:text-cyan-300 dark:border-cyan-800",
+} as const;
+
 export const EXAMPLE_TASKS = [
   {
     id: 1,

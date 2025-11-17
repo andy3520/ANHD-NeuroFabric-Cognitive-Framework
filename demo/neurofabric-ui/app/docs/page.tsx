@@ -147,7 +147,7 @@ export default function DocsPage() {
               </div>
               <div className="flex items-start gap-3">
                 <div className="bg-muted text-muted-foreground rounded px-2 py-1 text-xs font-semibold">v5.0</div>
-                <p className="text-sm">Deploy "NeuroFabric OS" - distributed synthetic brain runtime</p>
+                <p className="text-sm">Deploy &quot;NeuroFabric OS&quot; - distributed synthetic brain runtime</p>
               </div>
             </div>
 
@@ -156,7 +156,7 @@ export default function DocsPage() {
               <li>• FIPA ACL Message Structure Specification (2002)</li>
               <li>• Radford et al., Learning Transferable Visual Models from Natural Language Supervision (CLIP), OpenAI (2021)</li>
               <li>• Zhang et al., Versioned Capability Vectors for Agent Routing, NeurIPS Workshop (2024)</li>
-              <li>• McClelland, O'Reilly & McNaughton, Why There Are Complementary Learning Systems, Psychological Review (1995)</li>
+              <li>• McClelland, O&apos;Reilly & McNaughton, Why There Are Complementary Learning Systems, Psychological Review (1995)</li>
             </ul>
 
             <div className="mt-8 p-6 bg-primary/5 rounded-lg border border-primary/20">
