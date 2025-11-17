@@ -20,8 +20,6 @@ import {
   Loader2,
   FileDown,
   FileJson,
-  FileText,
-  Info,
 } from "lucide-react";
 import ChatInterface from "@/components/chat/ChatInterface";
 import MessageList from "@/components/chat/MessageList";
@@ -30,7 +28,7 @@ import TraditionalView from "@/components/traditional/TraditionalView";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Message, AgentMetrics } from "@/lib/types";
 import { exportToJSON, exportToMarkdown } from "@/lib/export";
-import Link from "next/link";
+import { MemoryViewer } from "@/components/MemoryViewer";
 
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -706,7 +704,7 @@ Recommendation: Focus on improving quality consistency while maintaining the str
             className="w-full"
             onValueChange={resetAllStates}
           >
-            <TabsList className="grid w-full grid-cols-3 h-auto">
+            <TabsList className="grid w-full grid-cols-4 h-auto">
               <TabsTrigger
                 value="fabric"
                 className="text-xs sm:text-sm whitespace-nowrap px-2 sm:px-4"
@@ -729,6 +727,13 @@ Recommendation: Focus on improving quality consistency while maintaining the str
               >
                 <span className="hidden sm:inline">Traditional AI</span>
                 <span className="sm:hidden">Traditional</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="memory"
+                className="text-xs sm:text-sm whitespace-nowrap px-2 sm:px-4"
+              >
+                <span className="hidden sm:inline">Memory</span>
+                <span className="sm:hidden">Memory</span>
               </TabsTrigger>
             </TabsList>
 
@@ -1250,6 +1255,11 @@ Recommendation: Focus on improving quality consistency while maintaining the str
                   </div>
                 </Card>
               )}
+            </TabsContent>
+
+            {/* Memory Tab */}
+            <TabsContent value="memory" className="space-y-6 mt-6">
+              <MemoryViewer />
             </TabsContent>
           </Tabs>
         </div>
