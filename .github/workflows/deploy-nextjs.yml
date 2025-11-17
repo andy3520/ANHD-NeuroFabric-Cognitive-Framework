@@ -1,0 +1,227 @@
+# ============================================================================
+# GitHub Actions Workflow: Deploy Next.js App to GitHub Pages
+# ============================================================================
+#
+# WHAT IS THIS WORKFLOW?
+# This workflow automatically builds and deploys your Next.js application
+# to GitHub Pages whenever you push code to the main branch. GitHub Pages
+# is a free static site hosting service provided by GitHub.
+#
+# WHAT ARE GITHUB ACTIONS?
+# GitHub Actions is GitHub's automation platform that lets you automate
+# your software development workflows. Think of it as a robot that performs
+# tasks whenever certain events happen in your repository.
+#
+# HOW DOES THIS WORK?
+# 1. You push code to the main branch
+# 2. GitHub Actions detects the push and starts this workflow
+# 3. The workflow checks out your code, builds the Next.js app as static files
+# 4. The static files are deployed to GitHub Pages
+# 5. Your site is live at: https://<username>.github.io/<repository-name>
+#
+# ============================================================================
+
+name: Deploy Next.js to GitHub Pages
+
+# ----------------------------------------------------------------------------
+# TRIGGER CONFIGURATION
+# ----------------------------------------------------------------------------
+# This section defines WHEN the workflow should run
+on:
+  # Trigger on push events to the main branch
+  # Every time you push commits to main, this workflow will run
+  push:
+    branches:
+      - main
+    # Optional: Only run if files in the Next.js app directory change
+    # This saves compute resources by not running the workflow for unrelated changes
+    paths:
+      - 'demo/neurofabric-ui/**'
+      - '.github/workflows/deploy-nextjs.yml'
+
+  # Allow manual workflow runs from the Actions tab
+  # This is useful for testing or re-deploying without making a new commit
+  workflow_dispatch:
+
+# ----------------------------------------------------------------------------
+# PERMISSIONS
+# ----------------------------------------------------------------------------
+# These permissions are REQUIRED for deploying to GitHub Pages
+# They tell GitHub Actions what the workflow is allowed to do
+permissions:
+  contents: read    # Allows reading repository contents
+  pages: write      # Allows writing to GitHub Pages
+  id-token: write   # Allows requesting OIDC token for deployment authentication
+
+# ----------------------------------------------------------------------------
+# CONCURRENCY CONTROL
+# ----------------------------------------------------------------------------
+# This prevents multiple deployments from running simultaneously
+# which could cause conflicts or race conditions
+concurrency:
+  group: "pages"
+  cancel-in-progress: false  # Don't cancel in-progress deployments
+
+# ============================================================================
+# JOBS
+# ============================================================================
+# A workflow can have multiple "jobs" that run in parallel or sequentially.
+# This workflow has 2 jobs: build and deploy
+# ============================================================================
+
+jobs:
+  # --------------------------------------------------------------------------
+  # JOB 1: BUILD
+  # --------------------------------------------------------------------------
+  # This job builds the Next.js application into static files
+  build:
+    # Job name that appears in GitHub Actions UI
+    name: Build Next.js Application
+    
+    # The type of machine to run the job on
+    # ubuntu-latest is a Linux machine provided by GitHub for free
+    runs-on: ubuntu-latest
+    
+    # --------------------------------------------------------------------------
+    # STEPS
+    # --------------------------------------------------------------------------
+    # Steps are individual tasks that run sequentially within a job
+    steps:
+      # STEP 1: Checkout the repository code
+      # This downloads your repository code to the GitHub Actions runner
+      # Think of it as "git clone" but optimized for CI/CD
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        # "uses" means we're using a pre-built action created by GitHub
+        # actions/checkout is an official action that checks out your repo
+
+      # STEP 2: Setup Node.js environment
+      # Next.js requires Node.js to build. This step installs Node.js.
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'  # Use Node.js version 20.x (LTS version)
+          # Cache npm dependencies to speed up future workflow runs
+          # This stores node_modules between runs so we don't re-download everything
+          cache: 'npm'
+          cache-dependency-path: 'demo/neurofabric-ui/package-lock.json'
+
+      # STEP 3: Install project dependencies
+      # This runs "npm ci" which is like "npm install" but:
+      # - Faster and more reliable in CI environments
+      # - Installs exact versions from package-lock.json
+      # - Removes node_modules before installing (clean slate)
+      - name: Install dependencies
+        working-directory: ./demo/neurofabric-ui
+        run: npm ci
+        # "working-directory" changes to the Next.js app folder
+        # "run" executes a shell command
+
+      # STEP 4: Setup GitHub Pages configuration
+      # This step configures Next.js with the correct base path for GitHub Pages
+      # GitHub Pages serves your site at: https://username.github.io/repo-name/
+      # So we need to tell Next.js about the "/repo-name" part
+      - name: Setup Pages configuration
+        id: pages
+        uses: actions/configure-pages@v4
+        # This action provides info about your Pages deployment
+        # We'll use this info in the next step
+
+      # STEP 5: Build Next.js application
+      # This runs "next build" which:
+      # - Compiles TypeScript/JSX to JavaScript
+      # - Optimizes images and assets
+      # - Generates static HTML files (because we configured output: 'export')
+      # - Creates an "out" folder with all static files ready to deploy
+      - name: Build Next.js application
+        working-directory: ./demo/neurofabric-ui
+        run: npm run build
+        env:
+          # Pass the base path to Next.js during build
+          # This ensures all links and assets use the correct path
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+
+      # STEP 6: Upload build artifacts to GitHub Pages
+      # This packages the "out" folder (containing our static site) and
+      # prepares it for deployment to GitHub Pages
+      - name: Upload artifact for GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload the "out" directory created by Next.js build
+          # This is where Next.js puts all the static files
+          path: ./demo/neurofabric-ui/out
+
+  # --------------------------------------------------------------------------
+  # JOB 2: DEPLOY
+  # --------------------------------------------------------------------------
+  # This job deploys the built files to GitHub Pages
+  # It runs AFTER the build job completes successfully
+  deploy:
+    name: Deploy to GitHub Pages
+    
+    # This job depends on the "build" job
+    # It won't start until "build" completes successfully
+    needs: build
+    
+    # Deploy to the GitHub Pages environment
+    # This creates a deployment in the GitHub UI you can track
+    environment:
+      name: github-pages
+      # This URL will be where your site is live
+      # ${{ steps.deployment.outputs.page_url }} is set by the deploy action
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+      # STEP 1: Deploy to GitHub Pages
+      # This takes the artifact uploaded in the build job and deploys it
+      # to GitHub Pages. This is the final step that makes your site live!
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        # This official action handles all the complexity of deploying to Pages
+
+# ============================================================================
+# NEXT STEPS AFTER CREATING THIS WORKFLOW
+# ============================================================================
+#
+# 1. ENABLE GITHUB PAGES IN YOUR REPOSITORY:
+#    - Go to your repository on GitHub
+#    - Click "Settings" tab
+#    - Click "Pages" in the left sidebar
+#    - Under "Source", select "GitHub Actions"
+#    - Click "Save"
+#
+# 2. PUSH THIS FILE TO YOUR MAIN BRANCH:
+#    - Commit this file to your repository
+#    - Push to the main branch
+#    - The workflow will automatically run
+#
+# 3. MONITOR THE DEPLOYMENT:
+#    - Go to the "Actions" tab in your repository
+#    - You'll see the workflow running
+#    - Click on it to see detailed logs
+#    - Once complete, your site will be live!
+#
+# 4. ACCESS YOUR DEPLOYED SITE:
+#    - Visit: https://<your-username>.github.io/<repository-name>
+#    - For this repo: https://andy3520.github.io/ANHD-NeuroFabric-Cognitive-Framework
+#
+# ============================================================================
+# TROUBLESHOOTING TIPS
+# ============================================================================
+#
+# If the workflow fails:
+# - Check the Actions tab for error messages
+# - Common issues:
+#   * Build errors: Fix them locally first with "npm run build"
+#   * Missing permissions: Ensure permissions are set correctly above
+#   * Pages not enabled: Make sure GitHub Pages is enabled in Settings
+#
+# If the site loads but looks broken:
+# - Check that basePath in next.config.ts matches your repository name
+# - Verify images.unoptimized is set to true
+# - Check browser console for 404 errors on assets
+#
+# ============================================================================
