@@ -4,7 +4,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Sparkles } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Send, Sparkles, ChevronDown, ChevronUp } from "lucide-react";
 import { EXAMPLE_TASKS } from "@/lib/constants";
 
 interface ChatInterfaceProps {
@@ -14,6 +15,7 @@ interface ChatInterfaceProps {
 
 export default function ChatInterface({ onSubmit, isProcessing = false }: ChatInterfaceProps) {
   const [input, setInput] = useState("");
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(["Data Analysis"]));
 
   const handleSubmit = () => {
     if (input.trim() && !isProcessing) {
@@ -35,6 +37,24 @@ export default function ChatInterface({ onSubmit, isProcessing = false }: ChatIn
     }
   };
 
+  const toggleCategory = (category: string) => {
+    const newExpanded = new Set(expandedCategories);
+    if (newExpanded.has(category)) {
+      newExpanded.delete(category);
+    } else {
+      newExpanded.add(category);
+    }
+    setExpandedCategories(newExpanded);
+  };
+
+  // Group tasks by category
+  const tasksByCategory = EXAMPLE_TASKS.reduce((acc, task) => {
+    const category = task.category || "Other";
+    if (!acc[category]) acc[category] = [];
+    acc[category].push(task);
+    return acc;
+  }, {} as Record<string, typeof EXAMPLE_TASKS>);
+
   return (
     <div className="space-y-4">
       {/* Example Tasks */}
@@ -43,18 +63,44 @@ export default function ChatInterface({ onSubmit, isProcessing = false }: ChatIn
           <Sparkles className="h-4 w-4 text-primary" />
           <h3 className="text-sm font-medium">Example Tasks</h3>
         </div>
-        <div className="grid gap-2 sm:grid-cols-2">
-          {EXAMPLE_TASKS.map((task) => (
-            <Card
-              key={task.id}
-              className="cursor-pointer border-2 p-3 transition-all hover:border-primary hover:shadow-md"
-              onClick={() => handleExampleClick(task.prompt)}
+        
+        <div className="space-y-2">
+          {Object.entries(tasksByCategory).map(([category, tasks]) => (
+            <Collapsible
+              key={category}
+              open={expandedCategories.has(category)}
+              onOpenChange={() => toggleCategory(category)}
             >
-              <div className="space-y-1">
-                <h4 className="font-medium text-sm">{task.title}</h4>
-                <p className="text-xs text-muted-foreground">{task.description}</p>
-              </div>
-            </Card>
+              <CollapsibleTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-between p-2 h-auto hover:bg-muted"
+                >
+                  <span className="text-sm font-medium">{category}</span>
+                  {expandedCategories.has(category) ? (
+                    <ChevronUp className="h-4 w-4" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" />
+                  )}
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-2">
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {tasks.map((task) => (
+                    <Card
+                      key={task.id}
+                      className="cursor-pointer border-2 p-3 transition-all hover:border-primary hover:shadow-md"
+                      onClick={() => handleExampleClick(task.prompt)}
+                    >
+                      <div className="space-y-1">
+                        <h4 className="font-medium text-sm">{task.title}</h4>
+                        <p className="text-xs text-muted-foreground">{task.description}</p>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
           ))}
         </div>
       </div>

@@ -23,6 +23,7 @@ export type AgentType = keyof typeof AGENT_COLORS;
 export const EXAMPLE_TASKS = [
   {
     id: 1,
+    category: "Data Analysis",
     title: "Simple Analysis",
     description: "5 reviews - baseline comparison",
     prompt: `Analyze these customer reviews and provide insights:
@@ -38,6 +39,7 @@ Calculate the average rating and analyze overall sentiment trends.`,
   },
   {
     id: 2,
+    category: "Data Analysis",
     title: "Medium-Scale Analysis 📊",
     description: "50 reviews - shows token efficiency",
     prompt: `Analyze 50 customer reviews for a comprehensive business report:
@@ -54,6 +56,7 @@ This requires processing substantial data and synthesizing insights.`,
   },
   {
     id: 3,
+    category: "Data Analysis",
     title: "Large-Scale Deep Analysis 🔥",
     description: "500 reviews - demonstrates massive savings",
     prompt: `Perform comprehensive analysis of 500 customer reviews:
@@ -76,6 +79,7 @@ Deliver a comprehensive executive report with data-driven insights.`,
   },
   {
     id: 4,
+    category: "Legal & Compliance",
     title: "Multi-Document Legal Analysis ⚖️",
     description: "Contract review - context window challenge",
     prompt: `Analyze these 3 legal contracts for conflicts and risks:
@@ -93,6 +97,7 @@ Identify:
   },
   {
     id: 5,
+    category: "Research & Education",
     title: "Research Paper Synthesis 📚",
     description: "Multi-source synthesis task",
     prompt: `Synthesize findings from 5 research papers on AI safety:
@@ -108,5 +113,65 @@ Provide:
 - Future research directions suggested
 
 Synthesize a coherent overview connecting all papers.`,
+  },
+  {
+    id: 6,
+    category: "Business Intelligence",
+    title: "Market Trend Analysis 📈",
+    description: "Financial data analysis",
+    prompt: `Analyze quarterly sales data and market trends:
+
+Q1: Revenue $2.5M, Growth 15%, Market share 12%
+Q2: Revenue $2.3M, Growth -8%, Market share 11%
+Q3: Revenue $2.8M, Growth 22%, Market share 13%
+Q4: Revenue $3.1M, Growth 11%, Market share 14%
+
+Provide:
+- Year-over-year performance summary
+- Trend analysis and seasonality patterns
+- Market position assessment
+- Risk factors identified
+- Strategic recommendations for next year`,
+  },
+  {
+    id: 7,
+    category: "Content Creation",
+    title: "Product Description Generator ✨",
+    description: "Creative writing with quality validation",
+    prompt: `Write a compelling product description for a smart home thermostat:
+
+Features:
+- AI-powered temperature learning
+- Energy savings up to 30%
+- Mobile app control
+- Voice assistant compatible
+- Eco-friendly design
+
+Create a description that:
+- Highlights key benefits
+- Addresses customer pain points
+- Includes emotional appeal
+- Is SEO-friendly
+- Maintains professional tone`,
+  },
+  {
+    id: 8,
+    category: "Technical Support",
+    title: "Troubleshooting Guide Creation 🔧",
+    description: "Technical documentation",
+    prompt: `Create a troubleshooting guide for common WiFi connectivity issues:
+
+Cover these scenarios:
+- Cannot connect to network
+- Intermittent connection drops
+- Slow internet speed
+- Device not detected
+- Password incorrect errors
+
+For each issue provide:
+- Possible causes
+- Step-by-step solutions
+- Prevention tips
+- When to contact support`,
   },
 ];
