@@ -130,7 +130,7 @@ jobs:
       # STEP 5: Build Next.js application
       # This runs "next build" which:
       # - Compiles TypeScript/JSX to JavaScript
-      # - Optimizes images and assets
+      # - Copies images and assets as-is (no image optimization; see images.unoptimized: true)
       # - Generates static HTML files (because we configured output: 'export')
       # - Creates an "out" folder with all static files ready to deploy
       - name: Build Next.js application
