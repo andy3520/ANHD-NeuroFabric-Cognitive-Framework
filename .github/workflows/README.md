@@ -33,12 +33,12 @@ To enable GitHub Pages deployment for the first time:
 
 ### Step 2: Configure Repository Permissions
 
-The workflow requires specific permissions to deploy:
+The workflow requires specific permissions to deploy, but these are already set at the workflow level in the workflow file.
 
 1. In **Settings** → **Actions** → **General**
 2. Scroll to **Workflow permissions**
-3. Select **Read and write permissions**
-4. Check **Allow GitHub Actions to create and approve pull requests** (optional)
+3. **Leave the default**: "Read repository contents and packages permissions" selected.
+4. (Optional) Check **Allow GitHub Actions to create and approve pull requests** if your workflow needs to create PRs.
 5. Click **Save**
 
 ### Step 3: Trigger the Workflow
